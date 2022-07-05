@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:to_do_flutter/screens/add_task_screen.dart';
 import 'package:to_do_flutter/screens/my_drawer.dart';
 
-import '../blocs/bloc/tasks_state.dart';
+import '../blocs/tasks_bloc/tasks_state.dart';
 import '../blocs/bloc_exports.dart';
 import '../models/task.dart';
 import '../widgets/tasks_list.dart';

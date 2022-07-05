@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../blocs/bloc/tasks_state.dart';
+import '../blocs/tasks_bloc/tasks_state.dart';
 import '../blocs/bloc_exports.dart';
 import '../widgets/tasks_list.dart';
 import 'my_drawer.dart';

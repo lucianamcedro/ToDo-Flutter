@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:to_do_flutter/screens/recycler_bin.dart';
 import 'package:to_do_flutter/screens/tasks_screen.dart';
 
-import '../blocs/bloc/tasks_state.dart';
+import '../blocs/tasks_bloc/tasks_state.dart';
 import '../blocs/bloc_exports.dart';
 
 class MyDrawer extends StatelessWidget {
@@ -29,7 +29,7 @@ class MyDrawer extends StatelessWidget {
           BlocBuilder<TasksBloc, TasksState>(
             builder: (context, state) {
               return GestureDetector(
-                onTap: () => Navigator.of(context).pushNamed(
+                onTap: () => Navigator.of(context).pushReplacementNamed(
                   TaskScreen.id,
                 ),
                 child: ListTile(
@@ -44,7 +44,7 @@ class MyDrawer extends StatelessWidget {
           BlocBuilder<TasksBloc, TasksState>(
             builder: (context, state) {
               return GestureDetector(
-                onTap: () => Navigator.of(context).pushNamed(
+                onTap: () => Navigator.of(context).pushReplacementNamed(
                   RecyclerBin.id,
                 ),
                 child: ListTile(
@@ -55,6 +55,18 @@ class MyDrawer extends StatelessWidget {
               );
             },
           ),
+          BlocBuilder<SwitchBloc, SwitchState>(
+            builder: (context, state) {
+              return Switch(
+                value: state.switchValue,
+                onChanged: (newValue) {
+                  newValue
+                      ? context.read<SwitchBloc>().add(SwitchOnEvent())
+                      : context.read<SwitchBloc>().add(SwitchOffEvent());
+                },
+              );
+            },
+          )
         ],
       )),
     );
