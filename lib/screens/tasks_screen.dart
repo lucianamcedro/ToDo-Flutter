@@ -1,18 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:to_do_flutter/screens/add_task_screen.dart';
+import 'package:to_do_flutter/screens/my_drawer.dart';
 
+import '../blocs/bloc/tasks_state.dart';
 import '../blocs/bloc_exports.dart';
 import '../models/task.dart';
 import '../widgets/tasks_list.dart';
 
-class TaskScreen extends StatelessWidget {
-  TaskScreen({Key? key}) : super(key: key);
-  TextEditingController titleController = TextEditingController();
+class TaskScreen extends StatefulWidget {
+  const TaskScreen({Key? key}) : super(key: key);
+  static const id = 'tasks screen';
+  @override
+  State<TaskScreen> createState() => _TaskScreenState();
+}
 
+class _TaskScreenState extends State<TaskScreen> {
   void _addTask(BuildContext context) {
     showModalBottomSheet(
         context: context,
         builder: (context) => SingleChildScrollView(
-              child: AddTaskScreen(titleController: titleController),
+              child: Container(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: const AddTaskScreen(),
+              ),
             ));
   }
 
@@ -24,17 +35,18 @@ class TaskScreen extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(title: const Text('To do App'), actions: [
             IconButton(
-              onPressed: () {},
+              onPressed: () => _addTask(context),
               icon: const Icon(Icons.add),
             )
           ]),
+          drawer: MyDrawer(),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Center(
+              Center(
                 child: Chip(
                     label: Text(
-                  'Tasks:',
+                  '${state.allTasks.length} Tarefas',
                 )),
               ),
               TaskList(tasksList: tasksList)
@@ -47,60 +59,6 @@ class TaskScreen extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-}
-
-class AddTaskScreen extends StatelessWidget {
-  const AddTaskScreen({
-    Key? key,
-    required this.titleController,
-  }) : super(key: key);
-
-  final TextEditingController titleController;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding:
-          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-      child: Container(
-        padding: EdgeInsets.all(20),
-        child: Column(children: [
-          const Text(
-            'Adicionar tarefa',
-            style: TextStyle(fontSize: 24),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          TextField(
-            autofocus: true,
-            controller: titleController,
-            decoration: const InputDecoration(
-              label: Text('Nome'),
-              border: OutlineInputBorder(),
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text('Cancelar')),
-              ElevatedButton(
-                  onPressed: () {
-                    var task = Task(
-                      title: titleController.text,
-                    );
-                    context.read<TasksBloc>().add(AddTask(task: task));
-                    Navigator.pop(context);
-                  },
-                  child: Text('Adicionar')),
-            ],
-          ),
-        ]),
-      ),
     );
   }
 }
